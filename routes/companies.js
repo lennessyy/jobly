@@ -5,6 +5,11 @@ const ExpressError = require('../helpers/expressError')
 
 router.get('/', async (req, res, next) => {
     try {
+        if (Object.keys(req.query).length !== 0) {
+            const { search, min_employees, max_employees } = req.query
+            const companies = await Company.search(search, min_employees, max_employees)
+            return res.json({ companies: companies })
+        }
         const companies = await Company.all()
         return res.json({ companies: companies })
     } catch (e) {

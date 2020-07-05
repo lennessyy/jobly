@@ -43,6 +43,21 @@ class Company {
         await db.query('DELETE FROM companies WHERE handle = $1', [handle])
         return 'DELETED'
     }
+
+    static async search(query, min_employees, max_employees) {
+        if (!min_employees) {
+            min_employees = 0
+        }
+        if (!max_employees) {
+            max_employees = 10000000
+        }
+        if (!query) {
+            query = ''
+        }
+        const results = await db.query(`SELECT * FROM companies WHERE name ILIKE $1 AND num_employees > $2 AND num_employees < $3`, [`%${query}%`, min_employees, max_employees])
+
+        return results.rows
+    }
 }
 
 module.exports = Company
