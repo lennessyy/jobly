@@ -9,6 +9,7 @@ const morgan = require("morgan");
 const app = express();
 
 const companyRoutes = require('./routes/companies')
+const jobRoutes = require('./routes/jobs')
 
 app.use(express.json());
 
@@ -18,6 +19,7 @@ app.use(morgan("tiny"));
 /** 404 handler */
 
 app.use('/companies', companyRoutes)
+app.use('/jobs', jobRoutes)
 
 app.use(function (req, res, next) {
   const err = new ExpressError("Not Found", 404);

@@ -2,6 +2,8 @@ const express = require('express')
 const router = new express.Router()
 const Company = require('../models/company')
 const ExpressError = require('../helpers/expressError')
+const Job = require('../models/job')
+
 
 router.get('/', async (req, res, next) => {
     try {

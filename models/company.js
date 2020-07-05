@@ -2,6 +2,18 @@ const db = require('../db')
 const ExpressError = require('../helpers/expressError')
 const sqlForPartialUpdate = require('../helpers/partialUpdate')
 
+function handleMaxandMin(min, max) {
+    min = Number(min);
+    max = Number(max);
+    if (isNaN(min) || isNaN(max)) {
+        throw new ExpressError('min and max must be numbers', 400)
+    }
+    if (min > max) {
+        throw new ExpressError('min must be smaller than max', 400)
+    }
+    return [min, max]
+}
+
 class Company {
     constructor(handle, name) {
         this._handle = handle
@@ -54,6 +66,7 @@ class Company {
         if (!query) {
             query = ''
         }
+        [min_employees, max_employees] = handleMaxandMin(min_employees, max_employees)
         const results = await db.query(`SELECT * FROM companies WHERE name ILIKE $1 AND num_employees > $2 AND num_employees < $3`, [`%${query}%`, min_employees, max_employees])
 
         return results.rows
